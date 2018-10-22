@@ -10,8 +10,8 @@ except socket.error, msg:
 
 print 'Socket Created'
 
-host = 'www.morincameron.com'
-port = 6035
+host = 'www.johnpham.net'
+port = 80
 
 try:
   remote_ip = socket.gethostbyname( host )
@@ -37,3 +37,9 @@ except socket.error:
   sys.exit()
 
 print 'Message send successfully'
+
+reply = s.recv(4096)
+
+print reply
+
+s.close()
