@@ -18,12 +18,16 @@ print 'Socket bind complete'
 s.listen(10)
 print 'Socket now listening'
 
-conn, addr = s.accept()
+while 1:
+  conn, addr = s.accept()
+  print 'Connected with ' + addr[0] + ':' + str(addr[1])
 
-print 'Connected with ' + addr[0] + ':' + str(addr[1])
+  data = conn.recv(1024)
+  reply = 'OK...' + data
+  if not data:
+    break
 
-data = conn.recv(1024)
-conn.sendall(data)
+  conn.sendall(reply)
 
 conn.close()
 s.close()
