@@ -1,11 +1,13 @@
 import socket
 import sys
+from thread import *
 
 HOST = ''
 PORT = 6035
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 print 'Socket Created'
+s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
 try:
   s.bind((HOST, PORT))
