@@ -18,16 +18,23 @@ print 'Socket bind complete'
 s.listen(10)
 print 'Socket now listening'
 
+def clientthread(conn):
+  conn.send('Welcome to the server. Type something and hit enter\n')
+
+  while True:
+    data = conn.recv(1024)
+    reply = 'OK...' + data
+    if not data:
+      break
+
+    conn.sendall(reply)
+
+  conn.close()
+
 while 1:
   conn, addr = s.accept()
   print 'Connected with ' + addr[0] + ':' + str(addr[1])
 
-  data = conn.recv(1024)
-  reply = 'OK...' + data
-  if not data:
-    break
+  start_new_thread(clientthread ,(conn,))
 
-  conn.sendall(reply)
-
-conn.close()
 s.close()
