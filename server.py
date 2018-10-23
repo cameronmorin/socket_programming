@@ -4,6 +4,7 @@ from thread import *
 
 HOST = ''
 PORT = 6035
+connections = []
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 print 'Socket Created'
@@ -25,16 +26,24 @@ def clientthread(conn):
 
   while True:
     data = conn.recv(1024)
-    reply = 'OK...' + data
-    if not data:
+    if (data[:2] == '!q'):
       break
+    elif (data[:9] == '!sendall '):
+      reply = data[9:]
+      for item in connections:
+        item.sendall(reply)
+    else:
+      reply = 'OK...' + data
+      if not data:
+        break
+      conn.sendall(reply)
 
-    conn.sendall(reply)
 
   conn.close()
 
 while 1:
   conn, addr = s.accept()
+  connections.append(conn)
   print 'Connected with ' + addr[0] + ':' + str(addr[1])
 
   start_new_thread(clientthread ,(conn,))
